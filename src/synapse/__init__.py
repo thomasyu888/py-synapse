@@ -16,3 +16,5 @@ finally:
     del version, PackageNotFoundError
 
 from .client import session
+
+__all__ = ["session"]
