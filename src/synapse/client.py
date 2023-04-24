@@ -79,9 +79,10 @@ class SynapseClient(ABC):
         sess.headers.update(
             {
                 "User-Agent": f"py-synapse/{__version__} {user_agent}",
-                "Authorization": f"Bearer {self.auth_token}",
             }
         )
+        if self.auth_token is not None:
+            sess.headers.update({"Authorization": f"Bearer {self.auth_token}"})
         return sess
 
     def get(
