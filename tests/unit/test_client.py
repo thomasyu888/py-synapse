@@ -11,8 +11,10 @@ from synapse.exceptions import (
 from synapse.constants import (
     CONTENT_TYPE_HEADER,
     JSON_CONTENT_TYPE,
+    SYNAPSE_USER_AGENT_HEADER,
+    SYNAPSE_DEFAULT_REPO_ENDPOINT,
 )
-from synapse.client import _handle_response, _generate_request_url
+from synapse.client import _handle_response, _generate_request_url, SynapseClient
 
 
 def test__handle_response_error():
@@ -84,3 +86,80 @@ def test__generate_request_url():
         _generate_request_url("https://synapse.org", "/entity")
         == "https://synapse.org/entity"
     )
+
+
+class TestSynapseBaseClient:
+    """Test base client"""
+
+    @pytest.fixture
+    def client_setup(self):
+        class TestClient(SynapseClient):
+            pass
+
+        auth_token = "I am a test token"
+        return auth_token, TestClient(auth_token=auth_token)
+
+    @pytest.fixture
+    def test_data(self):
+        req_response = Mock(requests.Response)
+        path = "/entity/syn123"
+        headers = SYNAPSE_USER_AGENT_HEADER
+        stub_response = {"id": "syn123"}
+        params = {"key": "value"}
+        return req_response, path, headers, stub_response, params
+
+    # get
+
+    def test_get_use_default_endpoint(self, client_setup, test_data):
+        auth_token, tc = client_setup
+        req_response, path, headers, stub_response, params = test_data
+
+        with patch.object(
+            requests.Session, "get", return_value=req_response
+        ) as mock_req_get, patch.object(
+            client, "_handle_response", return_value=stub_response
+        ) as mock_handle, patch.object(
+            req_response, "json", return_value={}
+        ):
+            assert tc.get(path, query_parameters=params) == stub_response
+            mock_req_get.assert_called_once_with(
+                SYNAPSE_DEFAULT_REPO_ENDPOINT + path, params=params
+            )
+            mock_handle.assert_called_once_with(response=req_response)
+
+    def test_get_custom_endpoint(self, client_setup, test_data):
+        auth_token, tc = client_setup
+        req_response, path, headers, stub_response, params = test_data
+        endpoint = "https://repo-dev.dev.sagebase.org/repo/v1"
+
+        with patch.object(
+            requests.Session, "get", return_value=req_response
+        ) as mock_req_get, patch.object(
+            client, "_handle_response", return_value=stub_response
+        ) as mock_handle, patch.object(
+            req_response, "json", return_value={}
+        ):
+            assert (
+                tc.get(path, server_url=endpoint, query_parameters=params)
+                == stub_response
+            )
+            mock_req_get.assert_called_once_with(endpoint + path, params=params)
+            mock_handle.assert_called_once_with(response=req_response)
+
+    # # post
+    def test_post_use_default_endpoint(self, client_setup, test_data):
+        auth_token, tc = client_setup
+        req_response, path, headers, body, params = test_data
+
+        with patch.object(
+            requests.Session, "get", return_value=req_response
+        ) as mock_req_get, patch.object(
+            client, "_handle_response", return_value=body
+        ) as mock_handle, patch.object(
+            req_response, "json", return_value={}
+        ):
+            assert tc.get(path, query_parameters=params, data=body) == body
+            mock_req_get.assert_called_once_with(
+                SYNAPSE_DEFAULT_REPO_ENDPOINT + path, params=params, data=body
+            )
+            mock_handle.assert_called_once_with(response=req_response)
