@@ -147,17 +147,18 @@ class TestSynapseBaseClient:
             mock_handle.assert_called_once_with(response=req_response)
 
     # # post
-    def test_post_use_default_endpoint(self, client_setup, test_data):
+    # The patches closet to the function has to be first
+    @patch.object(requests.Session, "get")
+    @patch.object(client, "_handle_response")
+    def test_post_use_default_endpoint(
+        self, mock_handle, mock_req_get, client_setup, test_data
+    ):
         auth_token, tc = client_setup
         req_response, path, headers, body, params = test_data
+        mock_req_get.return_value = req_response
+        mock_handle.return_value = body
 
-        with patch.object(
-            requests.Session, "get", return_value=req_response
-        ) as mock_req_get, patch.object(
-            client, "_handle_response", return_value=body
-        ) as mock_handle, patch.object(
-            req_response, "json", return_value={}
-        ):
+        with patch.object(req_response, "json", return_value={}):
             assert tc.get(path, query_parameters=params, data=body) == body
             mock_req_get.assert_called_once_with(
                 SYNAPSE_DEFAULT_REPO_ENDPOINT + path, params=params, data=body
