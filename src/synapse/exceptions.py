@@ -1,3 +1,4 @@
+"""Synapse client Exceptions"""
 from typing import Optional
 
 import requests  # type: ignore

@@ -1,3 +1,4 @@
+"""Initialize client"""
 import logging
 
 import sys

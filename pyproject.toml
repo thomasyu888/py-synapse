@@ -17,3 +17,7 @@ line-length = 88
 # exclude_dirs = ["tests", "path/to/file"]
 # tests = ["B201", "B301"]
 # skips = ["B101", "B601"]
+
+[tool.interrogate]
+ignore-init-method = true
+fail-under = 90

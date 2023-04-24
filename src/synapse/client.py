@@ -1,3 +1,4 @@
+"""Synapse base client"""
 from abc import ABC
 
 # from dataclasses import dataclass

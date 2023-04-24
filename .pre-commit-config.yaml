@@ -41,6 +41,7 @@ repos:
   - id: mypy
     additional_dependencies: [pydantic~=1.10]
 
+# Scans for code vulnerabilities
 - repo: https://github.com/PyCQA/bandit
   rev: '1.7.5'
   hooks:
@@ -49,12 +50,12 @@ repos:
     # additional_dependencies: ["bandit[toml]"]
 
 # Checks for missing docstrings
-# - repo: https://github.com/econchick/interrogate
-#   rev: 1.5.0
-#   hooks:
-#   - id: interrogate
-#     exclude: ^(docs/conf.py|setup.py|tests)
-#     args: [--config=pyproject.toml]
+- repo: https://github.com/econchick/interrogate
+  rev: 1.5.0
+  hooks:
+  - id: interrogate
+    exclude: ^(docs/conf.py|setup.py|tests)
+    args: [--config=pyproject.toml]
 
 # finds dead python code
 # - repo: https://github.com/jendrikseipp/vulture

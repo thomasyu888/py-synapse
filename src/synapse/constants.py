@@ -1,3 +1,5 @@
+"""Constants used by the client"""
+
 import os
 
 import requests  # type: ignore
@@ -11,9 +13,7 @@ ISO_FORMAT = "%Y-%m-%dT%H:%M:%S.000Z"
 CONTENT_TYPE_HEADER = "content-type"
 JSON_CONTENT_TYPE = "application/json"
 
-
 # Synapse specific constants
-
 SYNAPSE_DEFAULT_REPO_ENDPOINT = "https://repo-prod.prod.sagebase.org/repo/v1"
 SYNAPSE_DEFAULT_AUTH_ENDPOINT = "https://repo-prod.prod.sagebase.org/auth/v1"
 SYNAPSE_DEFAULT_FILE_ENDPOINT = "https://repo-prod.prod.sagebase.org/file/v1"
