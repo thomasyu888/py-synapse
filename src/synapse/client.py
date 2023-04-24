@@ -85,15 +85,20 @@ class SynapseClient(ABC):
         return sess
 
     def get(
-        self, endpoint_path: str, server_url: Optional[str] = None, **kwargs
+        self,
+        endpoint_path: str,
+        server_url: Optional[str] = None,
+        query_parameters: Optional[dict] = None,
+        **kwargs,
     ) -> Union[dict, str]:
         """Performs a HTTP Get request
 
         Args:
             endpoint_path (str): the unique path in the URI of the resource
                                  (i.e. "/entity/syn123")
-            server_url (Optional[str], optional): The Synapse server endpoint.
-                                                  Defaults to None.
+            server_url (str): The Synapse server endpoint.
+                              Defaults to None.
+            query_parameters (dict): path parameters to include in this request
 
         Returns:
             dict, str: the response body of the request
@@ -106,34 +111,107 @@ class SynapseClient(ABC):
 
         url = _generate_request_url(server_url, endpoint_path)
         # TODO: Add logger debug to print url
-        resp = self.session.get(url, **kwargs)
+        resp = self.session.get(url, params=query_parameters, **kwargs)
         # TODO: Add logger debug to print resp
         return _handle_response(response=resp)
 
-    # _services: dict = {
-    #     "teams": "TeamsService",
-    # }
+    def put(
+        self,
+        endpoint_path: str,
+        server_url: Optional[str] = None,
+        query_parameters: Optional[dict] = None,
+        request_body: Optional[dict] = None,
+        **kwargs,
+    ) -> Union[dict, str]:
+        """Performs a HTTP Put request
 
-    # def get_available_services(self) -> list:
-    #     """Get available Synapse services
-    #     This is a beta feature and is subject to change"""
-    #     services = self._services.keys()
-    #     return list(services)
+        Args:
+            endpoint_path (str): the unique path in the URI of the resource
+                                 (i.e. "/entity/syn123")
+            server_url (str): The Synapse server endpoint.
+                              Defaults to None.
+            query_parameters (dict): path parameters to include in this request
+            request_body (dict): The request body
 
-    # def service(self, service_name: str):
-    #     """Get available Synapse services
-    #     This is a beta feature and is subject to change"""
-    #     # This is to avoid circular imports
-    #     # TODO: revisit the import order and method https://stackoverflow.com/a/37126790
-    #     # To move this to the top
-    #     import synapse.services
-    #     assert isinstance(service_name, str)
-    #     service_name = service_name.lower().replace(" ", "_")
-    #     assert service_name in self._services, (
-    #         f"Unrecognized service ({service_name}). Run the 'get_available_"
-    #         "services()' method to get a list of available services."
-    #     )
-    #     service_attr = self._services[service_name]
-    #     service_cls = getattr(synapse.services, service_attr)
-    #     service = service_cls(self)
-    #     return service
+        Returns:
+            dict, str: the response body of the request
+
+        Raises:
+            SynapseClientError: please see each error message
+        """
+        if server_url is None:
+            server_url = SYNAPSE_DEFAULT_REPO_ENDPOINT
+
+        url = _generate_request_url(server_url, endpoint_path)
+        # TODO: Add logger debug to print url
+        resp = self.session.put(
+            url, params=query_parameters, data=request_body, **kwargs
+        )
+        # TODO: Add logger debug to print resp
+        return _handle_response(response=resp)
+
+    def post(
+        self,
+        endpoint_path: str,
+        server_url: Optional[str] = None,
+        query_parameters: Optional[dict] = None,
+        request_body: Optional[dict] = None,
+        **kwargs,
+    ) -> Union[dict, str]:
+        """Performs a HTTP Post request
+
+        Args:
+            endpoint_path (str): the unique path in the URI of the resource
+                                 (i.e. "/entity/syn123")
+            server_url (str): The Synapse server endpoint.
+                              Defaults to None.
+            query_parameters (dict): path parameters to include in this request
+            request_body (dict): The request body
+
+        Returns:
+            dict, str: the response body of the request
+
+        Raises:
+            SynapseClientError: please see each error message
+        """
+        if server_url is None:
+            server_url = SYNAPSE_DEFAULT_REPO_ENDPOINT
+
+        url = _generate_request_url(server_url, endpoint_path)
+        # TODO: Add logger debug to print url
+        resp = self.session.post(
+            url, params=query_parameters, data=request_body, **kwargs
+        )
+        # TODO: Add logger debug to print resp
+        return _handle_response(response=resp)
+
+    def delete(
+        self,
+        endpoint_path: str,
+        server_url: Optional[str] = None,
+        query_parameters: Optional[dict] = None,
+        **kwargs,
+    ) -> Union[dict, str]:
+        """Performs a HTTP Delete request
+
+        Args:
+            endpoint_path (str): the unique path in the URI of the resource
+                                 (i.e. "/entity/syn123")
+            server_url (str): The Synapse server endpoint.
+                              Defaults to None.
+            query_parameters (dict): path parameters to include in this request
+
+        Returns:
+            dict, str: the response body of the request
+
+        Raises:
+            SynapseClientError: please see each error message
+        """
+        if server_url is None:
+            server_url = SYNAPSE_DEFAULT_REPO_ENDPOINT
+
+        url = _generate_request_url(server_url, endpoint_path)
+        # TODO: Add logger debug to print url
+        resp = self.session.delete(url, params=query_parameters, **kwargs)
+        # TODO: Add logger debug to print resp
+        return _handle_response(response=resp)
