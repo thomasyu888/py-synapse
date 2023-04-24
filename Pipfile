@@ -8,6 +8,7 @@ synapse = {editable = true, path = ".", extras = ["all"]}
 pre-commit = "*"
 types-requests = "*"
 mypy = "*"
+ipython = "*"
 
 [dev-packages]
 synapse = {editable = true, path = ".", extras = ["testing", "dev"]}
