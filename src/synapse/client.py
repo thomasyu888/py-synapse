@@ -1,7 +1,5 @@
 """Synapse base client"""
 from abc import ABC
-
-# from dataclasses import dataclass
 from typing import Optional, Union
 import urllib.parse as urllib_parse
 
