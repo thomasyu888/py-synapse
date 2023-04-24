@@ -15,6 +15,6 @@ except PackageNotFoundError:  # pragma: no cover
 finally:
     del version, PackageNotFoundError
 
-from .client import session
+# from synapse.client import session
 
-__all__ = ["session"]
+# __all__ = ["session"]
