@@ -45,8 +45,8 @@ repos:
   rev: '1.7.5'
   hooks:
   - id: bandit
-    # args: ["-c", "pyproject.toml"]
-    # additional_dependencies: ["bandit[toml]"]
+    args: ["-c", "pyproject.toml"]
+    additional_dependencies: ["bandit[toml]"]
 
 # Checks for missing docstrings
 - repo: https://github.com/econchick/interrogate
