@@ -4,7 +4,7 @@ import os
 
 import requests  # type: ignore
 
-# from .__version__ import __version__
+from synapse import __version__
 
 
 # Generic constants
@@ -22,9 +22,7 @@ SYNAPSE_USER_ID_HEADER = "userId"
 SYNAPSE_SIGNATURE_TIMESTAMP_HEADER = "signatureTimestamp"
 SYNAPSE_SIGNATURE_HEADER = "signature"
 SYNAPSE_USER_AGENT_HEADER = {
-    "User-Agent": "spccore/{version} {default}".format(
-        **{"version": "0.0.1", "default": requests.utils.default_user_agent()}
-    )
+    "User-Agent": f"py-synapse/{__version__} {requests.utils.default_user_agent()}"
 }
 
 SYNAPSE_DEFAULT_HTTP_HEADERS = {

@@ -7,12 +7,12 @@ import urllib.parse as urllib_parse
 
 import requests  # type: ignore
 
-from synapse import __version__
 from synapse.constants import (
     # SYNAPSE_DEFAULT_FILE_ENDPOINT,
     SYNAPSE_DEFAULT_REPO_ENDPOINT,
     CONTENT_TYPE_HEADER,
     JSON_CONTENT_TYPE,
+    SYNAPSE_USER_AGENT_HEADER,
 )
 from synapse.exceptions import check_status_code_and_raise_error
 
@@ -75,12 +75,7 @@ class SynapseClient(ABC):
             requests.Session: An authenticated Synapse session
         """
         sess = requests.Session()
-        user_agent = requests.utils.default_user_agent()
-        sess.headers.update(
-            {
-                "User-Agent": f"py-synapse/{__version__} {user_agent}",
-            }
-        )
+        sess.headers.update(SYNAPSE_USER_AGENT_HEADER)
         if self.auth_token is not None:
             sess.headers.update({"Authorization": f"Bearer {self.auth_token}"})
         return sess

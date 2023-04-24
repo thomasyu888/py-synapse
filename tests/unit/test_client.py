@@ -5,8 +5,6 @@ import pytest
 import requests  # type: ignore
 
 from synapse import client
-
-# from synapse.client import *
 from synapse.exceptions import (
     SynapseBadRequestError,
 )
