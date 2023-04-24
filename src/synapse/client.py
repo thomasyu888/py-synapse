@@ -17,14 +17,18 @@ from synapse.exceptions import check_status_code_and_raise_error
 
 
 def _generate_request_url(server_url: str, endpoint_path: str) -> str:
-    """
-    Generate the URL for the HTTP request
+    """Generate the URL for the HTTP request
 
-    :param endpoint: the Synapse base endpoint
-    :param request_path: the unique path in the URI of the resource
-                         (i.e. "/entity/syn123")
-    :return: the URI of the resource
-    :raises ValueError: when one or more parameters have invalid value
+    Args:
+        server_url (str): the Synapse base endpoint
+        endpoint_path (str): the unique endpoint path of the resource
+                             (i.e. "/entity/syn123")
+
+    Raises:
+        ValueError: when one or more parameters have invalid value
+
+    Returns:
+        str: the URI of the resource
     """
     if server_url is None or endpoint_path is None:
         raise ValueError("server_url and endpoint_path are required.")
@@ -33,34 +37,17 @@ def _generate_request_url(server_url: str, endpoint_path: str) -> str:
     return server_url + endpoint_path
 
 
-# def session(auth_token: str, profile: Optional[str] = None) -> requests.Session:
-#     """Create session
-
-#     Args:
-#         auth_token (str): Synapse auth token
-#         profile (str, optional): Profile to use for authentication. Defaults to None.
-
-#     Returns:
-#         Session: A requests session
-#     """
-#     sess = requests.Session()
-#     user_agent = requests.utils.default_user_agent()
-#     sess.headers.update(
-#         {
-#             "User-Agent": f"py-synapse/{__version__} {user_agent}",
-#             "Authorization": f"Bearer {auth_token}",
-#         }
-#     )
-#     return sess
-
-
 def _handle_response(response: requests.Response) -> Union[dict, str]:
-    """
-    Handle the requests' Response
+    """Handle the reqeusts' Response
 
-    :param response: the response returned from requests
-    :return: the response body
-    :raises SynapseClientError: please see each error message
+    Args:
+        response (requests.Response): Response returned from requests
+
+    Returns:
+        Union[dict, str]: The response body
+
+    Raises:
+        SynapseClientError: please see each error message
     """
     check_status_code_and_raise_error(response)
     content_type = response.headers.get(CONTENT_TYPE_HEADER, None)
@@ -72,15 +59,8 @@ def _handle_response(response: requests.Response) -> Union[dict, str]:
         return response.text
 
 
-# @dataclass
-# class SynapseClient:
-#     """Client"""
-
-#     session: requests.Session
-
-
 class SynapseClient(ABC):
-    """Client"""
+    """ABC meta class"""
 
     def __init__(self, auth_token: Optional[str] = None, profile: Optional[str] = None):
         self.auth_token = auth_token
@@ -124,9 +104,9 @@ class SynapseClient(ABC):
             server_url = SYNAPSE_DEFAULT_REPO_ENDPOINT
 
         url = _generate_request_url(server_url, endpoint_path)
-        print(url)
+        # TODO: Add logger debug to print url
         resp = self.session.get(url, **kwargs)
-        print(resp.json())
+        # TODO: Add logger debug to print resp
         return _handle_response(response=resp)
 
     # _services: dict = {

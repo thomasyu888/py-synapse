@@ -6,14 +6,14 @@ import requests  # type: ignore
 class SynapseClientError(Exception):
     """Exception thrown by the client"""
 
-    def __init__(
-        self, *, message: Optional[str] = None, error_code: Optional[str] = None
-    ):
+    def __init__(self, message: Optional[str] = None, error_code: Optional[str] = None):
+        """Base Client Error class
+
+        Args:
+            message (str): The reason why this error is raised. Defaults to None.
+            error_code (str): The error code from Synapse backend. Defaults to None.
         """
-        :param message: The reason why this error is raised
-        :param error_code: The error code from Synapse backend
-        """
-        self.message = message
+        super().__init__(message)
         self.error_code = error_code
 
 
@@ -73,6 +73,14 @@ ERRORS = {
 
 
 def check_status_code_and_raise_error(response: requests.Response) -> None:
+    """Check status code and raise error if status code is above 400
+
+    Args:
+        response (requests.Response): _description_
+
+    Raises:
+        SynapseClientError: Synapse client error
+    """
     error = None
     if 400 <= response.status_code < 500:
         error = ERRORS.get(response.status_code, SynapseClientError)
@@ -82,7 +90,8 @@ def check_status_code_and_raise_error(response: requests.Response) -> None:
         reason = response.reason
         if (reason is None or reason == "") and "reason" in response.json():
             reason = response.json()["reason"]
-        error_code = None
         if "errorCode" in response.json():
             error_code = response.json()["errorCode"]
+        else:
+            error_code = response.status_code
         raise error(message=reason, error_code=error_code)
