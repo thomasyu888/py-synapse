@@ -1,10 +1,6 @@
-==========
-py-synapse
-==========
+## py-synapse
 
-
-
-Py client
+The Core of the Synapse Python client
 
 .. _pyscaffold-notes:
 
