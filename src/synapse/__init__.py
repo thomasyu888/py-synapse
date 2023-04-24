@@ -1,3 +1,5 @@
+import logging
+
 import sys
 
 if sys.version_info[:2] >= (3, 8):
@@ -15,6 +17,10 @@ except PackageNotFoundError:  # pragma: no cover
 finally:
     del version, PackageNotFoundError
 
-# from synapse.client import session
+__author__ = "thomasyu888"
+__copyright__ = "thomasyu888"
+__license__ = "MIT"
 
-# __all__ = ["session"]
+_logger = logging.getLogger(__name__)
+
+__all__ = ["_logger"]

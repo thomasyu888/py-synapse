@@ -12,3 +12,8 @@ version_scheme = "no-guess-dev"
 [tool.ruff]
 # Same as Black.
 line-length = 88
+
+# [tool.bandit]
+# exclude_dirs = ["tests", "path/to/file"]
+# tests = ["B201", "B301"]
+# skips = ["B101", "B601"]
